@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Поздравительная открытка</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            text-align: center;
+            background: #f5f5f5;
+            padding: 10px;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .step {
+            background: white;
+            border-radius: 12px;
+            padding: 20px 15px;
+            margin: 15px auto;
+            width: 100%;
+            max-width: 95%;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        button {
+            background: #ff4081;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+            width: 100%;
+            max-width: 300px;
+            transition: all 0.2s;
+            font-weight: 500;
+            -webkit-appearance: none;
+        }
+        button:hover, button:active {
+            transform: scale(1.02);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        input, select {
+            padding: 12px 15px;
+            margin: 8px 0;
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            -webkit-appearance: none;
+        }
+        input[type="color"] {
+            height: 50px;
+            padding: 5px;
+        }
+        #card {
+            padding: 20px;
+            min-height: auto;
+            position: relative;
+            overflow: hidden;
+        }
+        .hidden {
+            display: none;
+        }
+        .image-row {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        .image-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            min-width: 45%;
+        }
+        .image-item img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            transition: all 0.2s;
+        }
+        .image-item img:active {
+            transform: scale(0.98);
+        }
+        .error {
+            color: red;
+            display: none;
+            font-size: 14px;
+            margin: 5px 0;
+        }
+        .light-text {
+            color: white !important;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5) !important;
+        }
+        .dark-text {
+            color: #333 !important;
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.5) !important;
+        }
+        .smiley {
+            font-size: 20px;
+            margin: 0 3px;
+            vertical-align: middle;
+        }
+        .signature {
+            text-align: right;
+            font-style: italic;
+            margin-top: 20px;
+            font-size: 16px;
+        }
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #f00;
+            opacity: 0.7;
+            animation: fall 5s linear infinite;
+        }
+        @keyframes fall {
+            to { transform: translateY(100vh) rotate(360deg); }
+        }
+        .title {
+            font-size: 22px;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        .wish-text {
+            line-height: 1.5;
+            margin: 15px 0;
+            font-size: 15px;
+        }
+        .ready-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .ready-buttons button {
+            margin: 0;
+        }
+        #notReadyBtn {
+            background: #aaa;
+        }
+        h2 {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+        p {
+            margin: 10px 0;
+            font-size: 15px;
+        }
+        #bouquet-img {
+            max-width: 60% !important;
+            margin: 10px auto;
+        }
+        .input-group {
+            margin-bottom: 10px;
+            text-align: left;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <!-- Шаг 1: Ввод данных -->
+    <div id="step1" class="step">
+        <h2>Шаг 1: Твои предпочтения <span class="smiley">🎂</span></h2>
+        
+        <div class="input-group">
+            <label for="age">Твой возраст</label>
+            <input type="number" id="age" placeholder="Введите возраст" min="1" max="120">
+        </div>
+        
+        <div class="input-group">
+            <label for="favColor">Любимый цвет</label>
+            <input type="color" id="favColor" value="#ff4081">
+        </div>
+        
+        <div class="input-group">
+            <label for="wish">Заветное желание</label>
+            <input type="text" id="wish" placeholder="О чём мечтаешь?">
+        </div>
+        
+        <div class="input-group">
+            <label for="birthdayDate">Дата рождения</label>
+            <input type="date" id="birthdayDate">
+        </div>
+        
+        <button onclick="validateStep1()">Далее <span class="smiley">➡️</span></button>
+    </div>
+
+    <!-- Шаг 2: Вопросы -->
+    <div id="step2" class="step hidden">
+        <h2>Шаг 2: Проверка внимания <span class="smiley">🧠</span></h2>
+        
+        <div class="input-group">
+            <label for="q1">Сколько будет 2+2? <span class="smiley">✏️</span></label>
+            <input type="number" id="q1">
+        </div>
+        
+        <div class="input-group">
+            <label for="q2">Зимой и летом одним цветом. Что это? <span class="smiley">🌲</span></label>
+            <input type="text" id="q2">
+        </div>
+        
+        <div class="input-group">
+            <label for="q3">Сколько месяцев в году имеют 28 дней? <span class="smiley">📅</span></label>
+            <input type="number" id="q3">
+        </div>
+        
+        <p id="quizError" class="error">Ответь на все вопросы правильно! <span class="smiley">😉</span></p>
+        <button onclick="validateStep2()">Готово! <span class="smiley">🎉</span></button>
+    </div>
+
+    <!-- Шаг 3: Подтверждение -->
+    <div id="step3" class="step hidden">
+        <h2>Ладно, это было не обязательно <span class="smiley">😊</span></h2>
+        <p>Вы готовы увидеть свою открытку? <span class="smiley">🎁</span></p>
+        
+        <div class="ready-buttons">
+            <button onclick="showFinalCard()">Конечно! <span class="smiley">❤️</span></button>
+            <button id="notReadyBtn" onclick="notReady()">Не готов(а)</button>
+        </div>
+    </div>
+
+    <!-- Финальная открытка -->
+    <div id="finalCard" class="step hidden">
+        <div id="card" style="border-radius: 12px; padding: 20px;">
+            <h1 class="title">Поздравляю с Днём Рождения!</h1>
+            <div id="wishText" class="wish-text"></div>
+            
+            <!-- Букет -->
+            <img id="bouquet-img" src="images/bouquet.png" alt="Букет цветов">
+            
+            <div class="image-row">
+                <!-- Торт -->
+                <div class="image-item">
+                    <img src="images/cake.png" alt="Праздничный торт">
+                </div>
+                
+                <!-- Напиток -->
+                <div class="image-item">
+                    <img src="images/drink.png" alt="Освежающий напиток">
+                </div>
+            </div>
+            
+            <div class="signature">
+                От Кати с любовью<span class="smiley">❤️</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let userData = {};
+
+        function validateStep1() {
+            // Проверяем заполнение обязательных полей
+            if (!document.getElementById("age").value || 
+                !document.getElementById("wish").value || 
+                !document.getElementById("birthdayDate").value) {
+                alert("Пожалуйста, заполните все поля!");
+                return;
+            }
+
+            // Сохраняем данные
+            userData = {
+                age: document.getElementById("age").value,
+                favColor: document.getElementById("favColor").value,
+                wish: document.getElementById("wish").value,
+                date: formatDate(document.getElementById("birthdayDate").value)
+            };
+            
+            nextStep(2);
+        }
+
+        function validateStep2() {
+            // Проверяем ответы
+            const q1 = document.getElementById("q1").value;
+            const q2 = document.getElementById("q2").value.toLowerCase();
+            const q3 = document.getElementById("q3").value;
+            
+            if (q1 !== "4" || !["ель", "ёлка", "елка"].includes(q2) || q3 !== "12") {
+                document.getElementById("quizError").style.display = "block";
+                return;
+            }
+            document.getElementById("quizError").style.display = "none";
+            
+            nextStep(3);
+        }
+
+        function notReady() {
+            alert("Ну ладно, подумай ещё... Но открытка того стоит! 😊");
+            // Возвращаем на первый шаг
+            nextStep(1);
+        }
+
+        function showFinalCard() {
+            const card = document.getElementById("card");
+            const bgColor = userData.favColor;
+            card.style.background = bgColor;
+            
+            // Определяем, тёмный ли фон
+            const isDark = isColorDark(bgColor);
+            
+            // Устанавливаем класс для всех текстовых элементов
+            const textElements = card.querySelectorAll('h1, p, .wish-text, .signature');
+            textElements.forEach(el => {
+                el.classList.remove('light-text', 'dark-text');
+                el.classList.add(isDark ? 'light-text' : 'dark-text');
+            });
+
+            document.getElementById("wishText").innerHTML = `
+                Пусть этот день будет началом счастливого года!<br><br>
+                Желаю тебе всего, о чём мечтаешь!<br><br>
+                <strong>"${userData.wish}"</strong> это лишь самая малость, что ты пожелала, но оно обязательно сбудется!<br><br>
+                Сегодня, ${userData.date}, тебе исполняется <strong>${userData.age}</strong> и отмечается день, когда появился на свет такой прекрасный человек, как ты!<br><br>
+                Всегда сияй и будь прекрасной!
+            `;
+            
+            createConfetti();
+            nextStep('finalCard');
+        }
+
+        function isColorDark(color) {
+            // Удаляем # если есть
+            const hex = color.replace('#', '');
+            
+            // Преобразуем в RGB
+            const r = parseInt(hex.substring(0, 2), 16);
+            const g = parseInt(hex.substring(2, 4), 16);
+            const b = parseInt(hex.substring(4, 6), 16);
+            
+            // Вычисляем яркость
+            const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+            
+            return brightness < 128;
+        }
+
+        function formatDate(dateString) {
+            const options = { day: 'numeric', month: 'long', year: 'numeric' };
+            return new Date(dateString).toLocaleDateString('ru-RU', options);
+        }
+
+        function createConfetti() {
+            const colors = ['#ff4081', '#00bcd4', '#ffeb3b', '#4caf50', '#e91e63'];
+            const card = document.getElementById('card');
+            
+            // Очищаем старые конфетти
+            document.querySelectorAll('.confetti').forEach(el => el.remove());
+            
+            for (let i = 0; i < 30; i++) { // Уменьшил количество для мобил
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.top = -10 + 'px';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.width = Math.random() * 8 + 4 + 'px';
+                confetti.style.height = Math.random() * 8 + 4 + 'px';
+                confetti.style.animationDelay = Math.random() * 3 + 's';
+                confetti.style.animationDuration = Math.random() * 2 + 2 + 's';
+                card.appendChild(confetti);
+            }
+        }
+
+        function nextStep(step) {
+            document.querySelectorAll('.step').forEach(el => el.classList.add('hidden'));
+            document.getElementById(step === 'finalCard' ? 'finalCard' : `step${step}`).classList.remove('hidden');
+            window.scrollTo(0, 0);
+        }
+    </script>
+</body>
+</html>
